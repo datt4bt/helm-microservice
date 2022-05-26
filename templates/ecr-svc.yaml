@@ -1,0 +1,13 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.microservice.ecr.name }}
+  labels:
+    name: {{ .Values.microservice.ecr.name }}
+spec:
+  ports:
+  - port: {{ .Values.microservice.ecr.port }}
+    targetPort: {{ .Values.microservice.ecr.port }}
+  selector:
+    name: {{ .Values.microservice.ecr.name }}

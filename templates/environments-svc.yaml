@@ -1,0 +1,13 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.microservice.environments.name }}
+  labels:
+    name: {{ .Values.microservice.environments.name }}
+spec:
+  ports:
+  - port: {{ .Values.microservice.environments.port }}
+    targetPort: {{ .Values.microservice.environments.port }}
+  selector:
+    name: {{ .Values.microservice.environments.name }}

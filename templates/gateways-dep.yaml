@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.microservice.gateways.name }}
+spec:
+  selector:
+    matchLabels:
+      name: {{ .Values.microservice.gateways.name }}
+  template:
+    metadata:
+      labels:
+        name: {{ .Values.microservice.gateways.name }}
+    spec:
+      containers:
+        - name: {{ .Values.microservice.gateways.name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.microservice.gateways.image.repository }}:{{ .Values.microservice.gateways.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.microservice.gateways.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.microservice.gateways.port }}
+          env: 
+            {{- range $name, $item := .Values.env }}
+            - name: {{ $name }}
+              {{- $item | toYaml | nindent 14 }}
+            {{- end }}

@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.microservice.environments.name }}
+spec:
+  selector:
+    matchLabels:
+      name: {{ .Values.microservice.environments.name }}
+  template:
+    metadata:
+      labels:
+        name: {{ .Values.microservice.environments.name }}
+    spec:
+      containers:
+        - name: {{ .Values.microservice.environments.name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.microservice.environments.image.repository }}:{{ .Values.microservice.environments.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.microservice.environments.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.microservice.environments.port }}
+          env: 
+            {{- range $name, $item := .Values.env }}
+            - name: {{ $name }}
+              {{- $item | toYaml | nindent 14 }}
+            {{- end }}

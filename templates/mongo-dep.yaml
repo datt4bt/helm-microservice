@@ -1,0 +1,23 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb
+  labels:
+    name: mongodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: mongodb
+  template:
+    metadata:
+      labels:
+        name: mongodb
+    spec:
+      containers:
+      - name: mongodb
+        image: "{{ .Values.microservice.mongo.image.repository }}:{{ .Values.microservice.mongo.image.tag }}"
+        ports:
+        - name: mongo
+          containerPort: 27017

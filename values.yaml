@@ -1,0 +1,172 @@
+# Default values for dat-chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: "datt4b0/microservices-gateways"
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "2372640204"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 3000
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+# resources: 
+#     limits:
+#       cpu: 2
+#       memory: 4Gb
+#     requests:
+#       cpu: 2
+#       memory: 4Gb
+resources:
+  requests:
+    memory: 2Gi
+    cpu: 2
+  limits:
+    memory: 2Gi
+    cpu: 2
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+env:
+  MONGO_URL: 
+    value: "mongodb://mongodb:27017/aws?authSource=admin"
+  HOST_CLIENT: 
+    value: "0.0.0.0"
+  HOST_ENVIRONMENTS: 
+    value: "environments"
+  HOST_AWS: 
+    value: "aws"
+  HOST_ECR: 
+    value: "ecr"
+  HOST_USERS: 
+    value: "users"
+  PORT_GATEWAYS: 
+    value: "3000"
+  PORT_ENVIRONMENTS: 
+    value: "3001"
+  PORT_AWS: 
+    value: 3003"
+  PORT_USERS: 
+    value: "3002"
+  PORT_ECR: 
+    value: "3004"
+  SECRET_KEY: 
+    value: "secretKEYEY"
+
+microservice:
+  mongo: 
+      name: "mongodb"
+      port: 27017
+      image:
+        repository: "mongo"
+        pullPolicy: IfNotPresent
+        # Overrides the image tag whose default is the chart appVersion.
+        tag: "latest" 
+  gateways: 
+      name: "gateways"
+      port: 3000
+      image:
+        repository: "datt4b0/microservices-gateways"
+        pullPolicy: IfNotPresent
+        # Overrides the image tag whose default is the chart appVersion.
+        tag: "2375289451"  
+  ecr:  
+      name: "ecr"
+      port: 3004
+      image:
+        repository: "datt4b0/microservices-ecr"
+        pullPolicy: IfNotPresent
+        # Overrides the image tag whose default is the chart appVersion.
+        tag: "2377061285"
+  environments: 
+      name: "environments"
+      port: 3001
+      image:
+        repository: "datt4b0/microservices-environments"
+        pullPolicy: IfNotPresent
+        # Overrides the image tag whose default is the chart appVersion.
+        tag: "2377061285" 
+  aws:
+      name: "aws"
+      port: 3003
+      image:
+        repository: "datt4b0/microservices-aws"
+        pullPolicy: IfNotPresent
+        # Overrides the image tag whose default is the chart appVersion.
+        tag: "2377061285" 
+  users:
+      name: "users"
+      port: 3002
+      image:
+        repository: "datt4b0/microservices-users"
+        pullPolicy: IfNotPresent
+        # Overrides the image tag whose default is the chart appVersion.
+        tag: "2377061285"  
+  
